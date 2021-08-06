@@ -145,7 +145,7 @@ genTx = do
                 pure (firstInput : otherInputs)
 
     deleteInputs (Set.fromList allInputs)
-    ChainIndexTx
+    ValidChainIndexTx
         <$> nextTxId
         <*> pure (Set.fromList $ fmap (flip TxIn Nothing) allInputs)
         <*> pure ((\(addr, vl) -> TxOut addr vl Nothing) <$> newOutputs)
