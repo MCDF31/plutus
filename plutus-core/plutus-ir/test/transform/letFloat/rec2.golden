@@ -1,13 +1,13 @@
-(lam
-  x
-  (con integer)
-  [
-    (lam
-      y
-      (con integer)
-      (let
-        (nonrec)
-        (termbind (strict) (vardecl i2 (con integer)) (con integer 3))
+(let
+  (nonrec)
+  (termbind (strict) (vardecl i2 (con integer)) (con integer 3))
+  (lam
+    x
+    (con integer)
+    [
+      (lam
+        y
+        (con integer)
         (let
           (rec)
           (termbind
@@ -16,26 +16,29 @@
           (termbind
             (strict) (vardecl k (con integer)) [ [ (builtin addInteger) y ] j ]
           )
-          (termbind
-            (strict)
-            (vardecl c (con integer))
-            [ [ (builtin addInteger) (con integer 1) ] i2 ]
-          )
           (let
             (nonrec)
             (termbind
               (strict)
-              (vardecl i1 (con integer))
-              [ [ (builtin addInteger) k ] (con integer 3) ]
+              (vardecl c (con integer))
+              [ [ (builtin addInteger) (con integer 1) ] i2 ]
             )
-            [
-              [ (builtin addInteger) (con integer 5) ]
-              [ [ (builtin addInteger) j ] i2 ]
-            ]
+            (let
+              (nonrec)
+              (termbind
+                (strict)
+                (vardecl i1 (con integer))
+                [ [ (builtin addInteger) k ] (con integer 3) ]
+              )
+              [
+                [ (builtin addInteger) (con integer 5) ]
+                [ [ (builtin addInteger) j ] i2 ]
+              ]
+            )
           )
         )
       )
-    )
-    (con integer 1)
-  ]
+      (con integer 1)
+    ]
+  )
 )

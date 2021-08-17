@@ -1,6 +1,6 @@
 (program
   (let
-    (nonrec)
+    (rec)
     (datatypebind
       (datatype
         (tyvardecl Bool (type))
@@ -9,51 +9,54 @@
         (vardecl True Bool) (vardecl False Bool)
       )
     )
-    (termbind
-      (strict)
-      (vardecl ifThenElse (all a (type) (fun (con bool) (fun a (fun a a)))))
-      (builtin ifThenElse)
-    )
-    (termbind
-      (strict)
-      (vardecl
-        verifySignature
-        (fun
-          (con bytestring)
-          (fun (con bytestring) (fun (con bytestring) (con bool))))
+    (let
+      (nonrec)
+      (termbind
+        (strict)
+        (vardecl ifThenElse (all a (type) (fun (con bool) (fun a (fun a a)))))
+        (builtin ifThenElse)
       )
-      (builtin verifySignature)
-    )
-    (termbind
-      (strict)
-      (vardecl
-        verifySignature
-        (fun
-          (con bytestring) (fun (con bytestring) (fun (con bytestring) Bool)))
+      (termbind
+        (strict)
+        (vardecl
+          verifySignature
+          (fun
+            (con bytestring)
+            (fun (con bytestring) (fun (con bytestring) (con bool))))
+        )
+        (builtin verifySignature)
       )
-      (lam
-        pubKey
-        (con bytestring)
+      (termbind
+        (strict)
+        (vardecl
+          verifySignature
+          (fun
+            (con bytestring) (fun (con bytestring) (fun (con bytestring) Bool)))
+        )
         (lam
-          message
+          pubKey
           (con bytestring)
           (lam
-            signature
+            message
             (con bytestring)
-            [
+            (lam
+              signature
+              (con bytestring)
               [
                 [
-                  { ifThenElse Bool }
-                  [ [ [ verifySignature pubKey ] message ] signature ]
+                  [
+                    { ifThenElse Bool }
+                    [ [ [ verifySignature pubKey ] message ] signature ]
+                  ]
+                  True
                 ]
-                True
+                False
               ]
-              False
-            ]
+            )
           )
         )
       )
+      verifySignature
     )
-    verifySignature
   )
 )

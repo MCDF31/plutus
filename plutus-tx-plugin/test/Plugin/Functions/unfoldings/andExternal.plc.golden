@@ -1,6 +1,6 @@
 (program
   (let
-    (nonrec)
+    (rec)
     (datatypebind
       (datatype
         (tyvardecl Bool (type))
@@ -9,27 +9,31 @@
         (vardecl True Bool) (vardecl False Bool)
       )
     )
-    (termbind
-      (strict)
-      (vardecl andExternal (fun Bool (fun Bool Bool)))
-      (lam
-        a
-        Bool
+    (let
+      (nonrec)
+      (termbind
+        (strict)
+        (vardecl andExternal (fun Bool (fun Bool Bool)))
         (lam
-          b
+          a
           Bool
-          {
-            [
+          (lam
+            b
+            Bool
+            {
               [
-                { [ Bool_match a ] (all dead (type) Bool) } (abs dead (type) b)
+                [
+                  { [ Bool_match a ] (all dead (type) Bool) }
+                  (abs dead (type) b)
+                ]
+                (abs dead (type) False)
               ]
-              (abs dead (type) False)
-            ]
-            (all dead (type) dead)
-          }
+              (all dead (type) dead)
+            }
+          )
         )
       )
+      [ [ andExternal True ] False ]
     )
-    [ [ andExternal True ] False ]
   )
 )

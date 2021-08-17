@@ -12,11 +12,20 @@
               (lam
                 a_i0
                 (type)
-                (all
-                  out_Maybe_i0
-                  (type)
-                  (fun
-                    out_Maybe_i1 (fun (fun a_i2 out_Maybe_i1) out_Maybe_i1))))
+                (ifix
+                  (lam
+                    Maybe_i0
+                    (fun (type) (type))
+                    (lam
+                      a_i0
+                      (type)
+                      (all
+                        out_Maybe_i0
+                        (type)
+                        (fun
+                          out_Maybe_i1
+                          (fun (fun a_i2 out_Maybe_i1) out_Maybe_i1)))))
+                  a_i1))
               a_i1
             ]))
         (lam
@@ -29,11 +38,20 @@
                 (lam
                   a_i0
                   (type)
-                  (all
-                    out_Maybe_i0
-                    (type)
-                    (fun
-                      out_Maybe_i1 (fun (fun a_i2 out_Maybe_i1) out_Maybe_i1))))
+                  (ifix
+                    (lam
+                      Maybe_i0
+                      (fun (type) (type))
+                      (lam
+                        a_i0
+                        (type)
+                        (all
+                          out_Maybe_i0
+                          (type)
+                          (fun
+                            out_Maybe_i1
+                            (fun (fun a_i2 out_Maybe_i1) out_Maybe_i1)))))
+                    a_i1))
                 a_i1
               ]
               (all
@@ -52,14 +70,28 @@
         (lam
           arg_0_i0
           a_i2
-          (abs
-            out_Maybe_i0
-            (type)
+          (iwrap
             (lam
-              case_Nothing_i0
-              out_Maybe_i2
+              Maybe_i0
+              (fun (type) (type))
               (lam
-                case_Just_i0 (fun a_i5 out_Maybe_i3) [ case_Just_i1 arg_0_i4 ]
+                a_i0
+                (type)
+                (all
+                  out_Maybe_i0
+                  (type)
+                  (fun
+                    out_Maybe_i1 (fun (fun a_i2 out_Maybe_i1) out_Maybe_i1)))))
+            a_i2
+            (abs
+              out_Maybe_i0
+              (type)
+              (lam
+                case_Nothing_i0
+                out_Maybe_i2
+                (lam
+                  case_Just_i0 (fun a_i5 out_Maybe_i3) [ case_Just_i1 arg_0_i4 ]
+                )
               )
             )
           )
@@ -75,13 +107,23 @@
           (lam
             a_i0
             (type)
-            (all
-              out_Maybe_i0
-              (type)
-              (fun out_Maybe_i1 (fun (fun a_i2 out_Maybe_i1) out_Maybe_i1))))
+            (ifix
+              (lam
+                Maybe_i0
+                (fun (type) (type))
+                (lam
+                  a_i0
+                  (type)
+                  (all
+                    out_Maybe_i0
+                    (type)
+                    (fun
+                      out_Maybe_i1
+                      (fun (fun a_i2 out_Maybe_i1) out_Maybe_i1)))))
+              a_i1))
           a_i2
         ]
-        x_i1
+        (unwrap x_i1)
       )
     )
   ]

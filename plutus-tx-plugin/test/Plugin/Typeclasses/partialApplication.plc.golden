@@ -1,6 +1,6 @@
 (program
   (let
-    (nonrec)
+    (rec)
     (datatypebind
       (datatype
         (tyvardecl Bool (type))
@@ -9,92 +9,105 @@
         (vardecl True Bool) (vardecl False Bool)
       )
     )
-    (datatypebind
-      (datatype
-        (tyvardecl Ordering (type))
+    (let
+      (rec)
+      (datatypebind
+        (datatype
+          (tyvardecl Ordering (type))
 
-        Ordering_match
-        (vardecl EQ Ordering) (vardecl GT Ordering) (vardecl LT Ordering)
-      )
-    )
-    (termbind
-      (strict)
-      (vardecl equalsInteger (fun (con integer) (fun (con integer) (con bool))))
-      (builtin equalsInteger)
-    )
-    (termbind
-      (strict)
-      (vardecl ifThenElse (all a (type) (fun (con bool) (fun a (fun a a)))))
-      (builtin ifThenElse)
-    )
-    (termbind
-      (strict)
-      (vardecl
-        lessThanEqualsInteger (fun (con integer) (fun (con integer) (con bool)))
-      )
-      (builtin lessThanEqualsInteger)
-    )
-    (termbind
-      (strict)
-      (vardecl
-        fOrdInteger_ccompare (fun (con integer) (fun (con integer) Ordering))
-      )
-      (lam
-        x
-        (con integer)
-        (lam
-          y
-          (con integer)
-          {
-            [
-              [
-                {
-                  [
-                    Bool_match
-                    [
-                      [ [ { ifThenElse Bool } [ [ equalsInteger x ] y ] ] True ]
-                      False
-                    ]
-                  ]
-                  (all dead (type) Ordering)
-                }
-                (abs dead (type) EQ)
-              ]
-              (abs
-                dead
-                (type)
-                {
-                  [
-                    [
-                      {
-                        [
-                          Bool_match
-                          [
-                            [
-                              [
-                                { ifThenElse Bool }
-                                [ [ lessThanEqualsInteger x ] y ]
-                              ]
-                              True
-                            ]
-                            False
-                          ]
-                        ]
-                        (all dead (type) Ordering)
-                      }
-                      (abs dead (type) LT)
-                    ]
-                    (abs dead (type) GT)
-                  ]
-                  (all dead (type) dead)
-                }
-              )
-            ]
-            (all dead (type) dead)
-          }
+          Ordering_match
+          (vardecl EQ Ordering) (vardecl GT Ordering) (vardecl LT Ordering)
         )
       )
+      (let
+        (nonrec)
+        (termbind
+          (strict)
+          (vardecl
+            equalsInteger (fun (con integer) (fun (con integer) (con bool)))
+          )
+          (builtin equalsInteger)
+        )
+        (termbind
+          (strict)
+          (vardecl ifThenElse (all a (type) (fun (con bool) (fun a (fun a a)))))
+          (builtin ifThenElse)
+        )
+        (termbind
+          (strict)
+          (vardecl
+            lessThanEqualsInteger
+            (fun (con integer) (fun (con integer) (con bool)))
+          )
+          (builtin lessThanEqualsInteger)
+        )
+        (termbind
+          (strict)
+          (vardecl
+            fOrdInteger_ccompare
+            (fun (con integer) (fun (con integer) Ordering))
+          )
+          (lam
+            x
+            (con integer)
+            (lam
+              y
+              (con integer)
+              {
+                [
+                  [
+                    {
+                      [
+                        Bool_match
+                        [
+                          [
+                            [ { ifThenElse Bool } [ [ equalsInteger x ] y ] ]
+                            True
+                          ]
+                          False
+                        ]
+                      ]
+                      (all dead (type) Ordering)
+                    }
+                    (abs dead (type) EQ)
+                  ]
+                  (abs
+                    dead
+                    (type)
+                    {
+                      [
+                        [
+                          {
+                            [
+                              Bool_match
+                              [
+                                [
+                                  [
+                                    { ifThenElse Bool }
+                                    [ [ lessThanEqualsInteger x ] y ]
+                                  ]
+                                  True
+                                ]
+                                False
+                              ]
+                            ]
+                            (all dead (type) Ordering)
+                          }
+                          (abs dead (type) LT)
+                        ]
+                        (abs dead (type) GT)
+                      ]
+                      (all dead (type) dead)
+                    }
+                  )
+                ]
+                (all dead (type) dead)
+              }
+            )
+          )
+        )
+        fOrdInteger_ccompare
+      )
     )
-    fOrdInteger_ccompare
   )
 )

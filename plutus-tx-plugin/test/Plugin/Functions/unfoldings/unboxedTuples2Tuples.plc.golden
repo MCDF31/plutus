@@ -1,6 +1,6 @@
 (program
   (let
-    (nonrec)
+    (rec)
     (datatypebind
       (datatype
         (tyvardecl UTuple2 (fun (type) (fun (type) (type))))
@@ -9,122 +9,169 @@
         (vardecl UTuple2 (fun a (fun b [ [ UTuple2 a ] b ])))
       )
     )
-    (datatypebind
-      (datatype
-        (tyvardecl
-          UTuple5
-          (fun
-            (type) (fun (type) (fun (type) (fun (type) (fun (type) (type))))))
-        )
-        (tyvardecl a (type))
-        (tyvardecl b (type))
-        (tyvardecl c (type))
-        (tyvardecl d (type))
-        (tyvardecl e (type))
-        UTuple5_match
-        (vardecl
-          UTuple5
-          (fun
-            a
+    (let
+      (rec)
+      (datatypebind
+        (datatype
+          (tyvardecl
+            UTuple5
             (fun
-              b (fun c (fun d (fun e [ [ [ [ [ UTuple5 a ] b ] c ] d ] e ])))))
+              (type) (fun (type) (fun (type) (fun (type) (fun (type) (type))))))
+          )
+          (tyvardecl a (type))
+          (tyvardecl b (type))
+          (tyvardecl c (type))
+          (tyvardecl d (type))
+          (tyvardecl e (type))
+          UTuple5_match
+          (vardecl
+            UTuple5
+            (fun
+              a
+              (fun
+                b
+                (fun c (fun d (fun e [ [ [ [ [ UTuple5 a ] b ] c ] d ] e ])))))
+          )
         )
       )
-    )
-    (termbind
-      (strict)
-      (vardecl addInteger (fun (con integer) (fun (con integer) (con integer))))
-      (builtin addInteger)
-    )
-    (termbind
-      (strict)
-      (vardecl addInteger (fun (con integer) (fun (con integer) (con integer))))
-      (lam x (con integer) (lam y (con integer) [ [ addInteger x ] y ]))
-    )
-    (termbind
-      (strict)
-      (vardecl
-        unboxedTuple
-        (fun
-          [
+      (let
+        (nonrec)
+        (termbind
+          (strict)
+          (vardecl
+            addInteger (fun (con integer) (fun (con integer) (con integer)))
+          )
+          (builtin addInteger)
+        )
+        (termbind
+          (strict)
+          (vardecl
+            addInteger (fun (con integer) (fun (con integer) (con integer)))
+          )
+          (lam x (con integer) (lam y (con integer) [ [ addInteger x ] y ]))
+        )
+        (termbind
+          (strict)
+          (vardecl
+            unboxedTuple
+            (fun
+              [
+                [
+                  [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
+                  (con integer)
+                ]
+                (con integer)
+              ]
+              (con integer))
+          )
+          (lam
+            ds
             [
-              [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
+              [
+                [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
+                (con integer)
+              ]
               (con integer)
             ]
-            (con integer)
-          ]
-          (con integer))
-      )
-      (lam
-        ds
-        [
-          [
-            [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
-            (con integer)
-          ]
-          (con integer)
-        ]
-        [
-          {
             [
               {
-                {
+                [
                   {
-                    { { UTuple5_match (con integer) } (con integer) }
+                    {
+                      {
+                        { { UTuple5_match (con integer) } (con integer) }
+                        (con integer)
+                      }
+                      (con integer)
+                    }
                     (con integer)
                   }
-                  (con integer)
-                }
+                  ds
+                ]
                 (con integer)
               }
-              ds
-            ]
-            (con integer)
-          }
-          (lam
-            i
-            (con integer)
-            (lam
-              j
-              (con integer)
               (lam
-                k
+                i
                 (con integer)
                 (lam
-                  l
+                  j
                   (con integer)
                   (lam
-                    m
+                    k
                     (con integer)
-                    [
-                      [
-                        addInteger
+                    (lam
+                      l
+                      (con integer)
+                      (lam
+                        m
+                        (con integer)
                         [
                           [
                             addInteger
-                            [ [ addInteger [ [ addInteger i ] j ] ] k ]
+                            [
+                              [
+                                addInteger
+                                [ [ addInteger [ [ addInteger i ] j ] ] k ]
+                              ]
+                              l
+                            ]
                           ]
-                          l
+                          m
                         ]
-                      ]
-                      m
-                    ]
+                      )
+                    )
                   )
                 )
               )
-            )
+            ]
           )
-        ]
-      )
-    )
-    (termbind
-      (strict)
-      (vardecl
-        unboxedTuples2Tuple
-        (fun
-          [
+        )
+        (termbind
+          (strict)
+          (vardecl
+            unboxedTuples2Tuple
+            (fun
+              [
+                [
+                  UTuple2
+                  [
+                    [
+                      [
+                        [ [ UTuple5 (con integer) ] (con integer) ]
+                        (con integer)
+                      ]
+                      (con integer)
+                    ]
+                    (con integer)
+                  ]
+                ]
+                [
+                  [
+                    [
+                      [ [ UTuple5 (con integer) ] (con integer) ] (con integer)
+                    ]
+                    (con integer)
+                  ]
+                  (con integer)
+                ]
+              ]
+              (con integer))
+          )
+          (lam
+            ds
             [
-              UTuple2
+              [
+                UTuple2
+                [
+                  [
+                    [
+                      [ [ UTuple5 (con integer) ] (con integer) ] (con integer)
+                    ]
+                    (con integer)
+                  ]
+                  (con integer)
+                ]
+              ]
               [
                 [
                   [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
@@ -134,42 +181,87 @@
               ]
             ]
             [
-              [
-                [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
-                (con integer)
-              ]
-              (con integer)
-            ]
-          ]
-          (con integer))
-      )
-      (lam
-        ds
-        [
-          [
-            UTuple2
-            [
-              [
-                [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
-                (con integer)
-              ]
-              (con integer)
-            ]
-          ]
-          [
-            [
-              [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
-              (con integer)
-            ]
-            (con integer)
-          ]
-        ]
-        [
-          {
-            [
               {
+                [
+                  {
+                    {
+                      UTuple2_match
+                      [
+                        [
+                          [
+                            [ [ UTuple5 (con integer) ] (con integer) ]
+                            (con integer)
+                          ]
+                          (con integer)
+                        ]
+                        (con integer)
+                      ]
+                    }
+                    [
+                      [
+                        [
+                          [ [ UTuple5 (con integer) ] (con integer) ]
+                          (con integer)
+                        ]
+                        (con integer)
+                      ]
+                      (con integer)
+                    ]
+                  }
+                  ds
+                ]
+                (con integer)
+              }
+              (lam
+                i
+                [
+                  [
+                    [
+                      [ [ UTuple5 (con integer) ] (con integer) ] (con integer)
+                    ]
+                    (con integer)
+                  ]
+                  (con integer)
+                ]
+                (lam
+                  j
+                  [
+                    [
+                      [
+                        [ [ UTuple5 (con integer) ] (con integer) ]
+                        (con integer)
+                      ]
+                      (con integer)
+                    ]
+                    (con integer)
+                  ]
+                  [ [ addInteger [ unboxedTuple i ] ] [ unboxedTuple j ] ]
+                )
+              )
+            ]
+          )
+        )
+        (lam
+          x
+          (con integer)
+          [
+            unboxedTuples2Tuple
+            [
+              [
                 {
-                  UTuple2_match
+                  {
+                    UTuple2
+                    [
+                      [
+                        [
+                          [ [ UTuple5 (con integer) ] (con integer) ]
+                          (con integer)
+                        ]
+                        (con integer)
+                      ]
+                      (con integer)
+                    ]
+                  }
                   [
                     [
                       [
@@ -184,84 +276,46 @@
                 [
                   [
                     [
-                      [ [ UTuple5 (con integer) ] (con integer) ] (con integer)
+                      [
+                        [
+                          {
+                            {
+                              {
+                                { { UTuple5 (con integer) } (con integer) }
+                                (con integer)
+                              }
+                              (con integer)
+                            }
+                            (con integer)
+                          }
+                          x
+                        ]
+                        x
+                      ]
+                      x
                     ]
-                    (con integer)
+                    x
                   ]
-                  (con integer)
+                  x
                 ]
-              }
-              ds
-            ]
-            (con integer)
-          }
-          (lam
-            i
-            [
-              [
-                [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
-                (con integer)
               ]
-              (con integer)
-            ]
-            (lam
-              j
-              [
-                [
-                  [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
-                  (con integer)
-                ]
-                (con integer)
-              ]
-              [ [ addInteger [ unboxedTuple i ] ] [ unboxedTuple j ] ]
-            )
-          )
-        ]
-      )
-    )
-    (lam
-      x
-      (con integer)
-      [
-        unboxedTuples2Tuple
-        [
-          [
-            {
-              {
-                UTuple2
-                [
-                  [
-                    [
-                      [ [ UTuple5 (con integer) ] (con integer) ] (con integer)
-                    ]
-                    (con integer)
-                  ]
-                  (con integer)
-                ]
-              }
-              [
-                [
-                  [ [ [ UTuple5 (con integer) ] (con integer) ] (con integer) ]
-                  (con integer)
-                ]
-                (con integer)
-              ]
-            }
-            [
               [
                 [
                   [
                     [
-                      {
+                      [
                         {
                           {
-                            { { UTuple5 (con integer) } (con integer) }
+                            {
+                              { { UTuple5 (con integer) } (con integer) }
+                              (con integer)
+                            }
                             (con integer)
                           }
                           (con integer)
                         }
-                        (con integer)
-                      }
+                        x
+                      ]
                       x
                     ]
                     x
@@ -270,36 +324,10 @@
                 ]
                 x
               ]
-              x
             ]
           ]
-          [
-            [
-              [
-                [
-                  [
-                    {
-                      {
-                        {
-                          { { UTuple5 (con integer) } (con integer) }
-                          (con integer)
-                        }
-                        (con integer)
-                      }
-                      (con integer)
-                    }
-                    x
-                  ]
-                  x
-                ]
-                x
-              ]
-              x
-            ]
-            x
-          ]
-        ]
-      ]
+        )
+      )
     )
   )
 )

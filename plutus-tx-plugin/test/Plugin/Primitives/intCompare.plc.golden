@@ -1,6 +1,6 @@
 (program
   (let
-    (nonrec)
+    (rec)
     (datatypebind
       (datatype
         (tyvardecl Bool (type))
@@ -9,31 +9,36 @@
         (vardecl True Bool) (vardecl False Bool)
       )
     )
-    (termbind
-      (strict)
-      (vardecl ifThenElse (all a (type) (fun (con bool) (fun a (fun a a)))))
-      (builtin ifThenElse)
-    )
-    (termbind
-      (strict)
-      (vardecl
-        lessThanInteger (fun (con integer) (fun (con integer) (con bool)))
+    (let
+      (nonrec)
+      (termbind
+        (strict)
+        (vardecl ifThenElse (all a (type) (fun (con bool) (fun a (fun a a)))))
+        (builtin ifThenElse)
       )
-      (builtin lessThanInteger)
-    )
-    (termbind
-      (strict)
-      (vardecl lessThanInteger (fun (con integer) (fun (con integer) Bool)))
-      (lam
-        x
-        (con integer)
+      (termbind
+        (strict)
+        (vardecl
+          lessThanInteger (fun (con integer) (fun (con integer) (con bool)))
+        )
+        (builtin lessThanInteger)
+      )
+      (termbind
+        (strict)
+        (vardecl lessThanInteger (fun (con integer) (fun (con integer) Bool)))
         (lam
-          y
+          x
           (con integer)
-          [ [ [ { ifThenElse Bool } [ [ lessThanInteger x ] y ] ] True ] False ]
+          (lam
+            y
+            (con integer)
+            [
+              [ [ { ifThenElse Bool } [ [ lessThanInteger x ] y ] ] True ] False
+            ]
+          )
         )
       )
+      lessThanInteger
     )
-    lessThanInteger
   )
 )

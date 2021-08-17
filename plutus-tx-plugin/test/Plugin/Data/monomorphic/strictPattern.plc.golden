@@ -1,6 +1,6 @@
 (program
   (let
-    (nonrec)
+    (rec)
     (datatypebind
       (datatype
         (tyvardecl StrictPattern (fun (type) (type)))
@@ -9,29 +9,33 @@
         (vardecl StrictPattern (fun a (fun a [ StrictPattern a ])))
       )
     )
-    (termbind
-      (strict)
-      (vardecl WStrictPattern (all a (type) (fun a (fun a [ StrictPattern a ])))
-      )
-      (abs
-        a
-        (type)
-        (lam
-          dt
+    (let
+      (nonrec)
+      (termbind
+        (strict)
+        (vardecl
+          WStrictPattern (all a (type) (fun a (fun a [ StrictPattern a ])))
+        )
+        (abs
           a
+          (type)
           (lam
             dt
             a
-            (let
-              (nonrec)
-              (termbind (strict) (vardecl dt a) dt)
-              (termbind (strict) (vardecl dt a) dt)
-              [ [ { StrictPattern a } dt ] dt ]
+            (lam
+              dt
+              a
+              (let
+                (nonrec)
+                (termbind (strict) (vardecl dt a) dt)
+                (termbind (strict) (vardecl dt a) dt)
+                [ [ { StrictPattern a } dt ] dt ]
+              )
             )
           )
         )
       )
+      [ [ { WStrictPattern (con integer) } (con integer 1) ] (con integer 2) ]
     )
-    [ [ { WStrictPattern (con integer) } (con integer 1) ] (con integer 2) ]
   )
 )
