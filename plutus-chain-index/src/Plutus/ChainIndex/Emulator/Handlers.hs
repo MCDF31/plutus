@@ -34,7 +34,7 @@ import qualified Data.Set                             as Set
 import           GHC.Generics                         (Generic)
 import           Ledger                               (TxId, TxOutRef (..))
 import           Plutus.ChainIndex.Effects            (ChainIndexControlEffect (..), ChainIndexQueryEffect (..))
-import           Plutus.ChainIndex.Emulator.DiskState (DiskState, addressMap, dataMap, mintingPolicyMap,
+import           Plutus.ChainIndex.Emulator.DiskState (DiskState, addressMap, dataMap, mintingPolicyMap, redeemerMap,
                                                        stakeValidatorMap, txMap, validatorMap)
 import qualified Plutus.ChainIndex.Emulator.DiskState as DiskState
 import           Plutus.ChainIndex.Tx                 (ChainIndexTx, citxOutputs)
@@ -78,6 +78,7 @@ handleQuery = \case
     ValidatorFromHash h -> gets (view $ diskState . validatorMap . at h)
     MintingPolicyFromHash h -> gets (view $ diskState . mintingPolicyMap . at h)
     StakeValidatorFromHash h -> gets (view $ diskState . stakeValidatorMap . at h)
+    RedeemerFromHash h -> gets (view $ diskState . redeemerMap . at h)
     TxOutFromRef TxOutRef{txOutRefId, txOutRefIdx} ->
         gets @ChainIndexEmulatorState
             (preview $ diskState

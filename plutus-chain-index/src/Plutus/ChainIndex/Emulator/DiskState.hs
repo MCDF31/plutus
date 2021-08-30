@@ -14,6 +14,7 @@ module Plutus.ChainIndex.Emulator.DiskState(
     , validatorMap
     , mintingPolicyMap
     , stakeValidatorMap
+    , redeemerMap
     , txMap
     , addressMap
     , fromTx
@@ -29,8 +30,8 @@ import qualified Data.Set               as Set
 import           GHC.Generics           (Generic)
 import           Ledger                 (Address (..), TxOut (..), TxOutRef)
 import           Ledger.Credential      (Credential)
-import           Ledger.Scripts         (Datum, DatumHash, MintingPolicy, MintingPolicyHash, StakeValidator,
-                                         StakeValidatorHash, Validator, ValidatorHash)
+import           Ledger.Scripts         (Datum, DatumHash, MintingPolicy, MintingPolicyHash, Redeemer, RedeemerHash,
+                                         StakeValidator, StakeValidatorHash, Validator, ValidatorHash)
 import           Ledger.TxId            (TxId)
 import           Plutus.ChainIndex.Tx   (ChainIndexTx (..), txOutRefs)
 
@@ -68,6 +69,7 @@ data DiskState =
         , _ValidatorMap      :: Map ValidatorHash Validator
         , _MintingPolicyMap  :: Map MintingPolicyHash MintingPolicy
         , _StakeValidatorMap :: Map StakeValidatorHash StakeValidator
+        , _RedeemerMap       :: Map RedeemerHash Redeemer
         , _TxMap             :: Map TxId ChainIndexTx
         , _AddressMap        :: CredentialMap
         }
@@ -78,12 +80,13 @@ makeLenses ''DiskState
 
 -- | The data we store on disk for a given 'ChainIndexTx'
 fromTx :: ChainIndexTx -> DiskState
-fromTx tx@ChainIndexTx{_citxData, _citxValidators, _citxMintingPolicies, _citxStakeValidators, _citxTxId} =
+fromTx tx@ChainIndexTx{_citxData, _citxValidators, _citxMintingPolicies, _citxStakeValidators, _citxTxId, _citxRedeemers} =
     DiskState
         { _DataMap = _citxData
         , _ValidatorMap = _citxValidators
         , _MintingPolicyMap = _citxMintingPolicies
         , _StakeValidatorMap = _citxStakeValidators
         , _TxMap = Map.singleton _citxTxId tx
+        , _RedeemerMap = _citxRedeemers
         , _AddressMap = txCredentialMap tx
         }
