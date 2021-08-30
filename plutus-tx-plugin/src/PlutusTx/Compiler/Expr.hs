@@ -25,6 +25,7 @@ import           PlutusTx.PIRTypes
 import qualified PlutusTx.Builtins.Class       as Builtins
 
 import qualified Class                         as GHC
+import qualified CoreArity                     as GHC (manifestArity)
 import qualified FV                            as GHC
 import qualified GhcPlugins                    as GHC
 import qualified MkId                          as GHC
@@ -410,11 +411,18 @@ hoistExpr var t =
                         let ty = PLC.varDeclType var'
                         t'' <- compileExpr t
                         let tInText = T.pack (show t'')
+                            traceProfile term =
+                                mkTrace
+                                    ty
+                                    ("entering" <> tInText)
+                                    (mkTrace ty ("exiting"<> tInText) term)
+                            lam 0 f = traceProfile f
+                            lam n f = \x -> lam (n-1) (f x)
                         return $
                             mkTrace
                                 ty
                                 ("entering" <> tInText)
-                                ((\() -> mkTrace ty ("exiting"<> tInText) t'') ())
+                                (lam (GHC.manifestArity t) t'')
                     else compileExpr t
 
                 -- See Note [Non-strict let-bindings]
