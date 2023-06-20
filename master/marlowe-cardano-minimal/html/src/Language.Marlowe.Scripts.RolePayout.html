@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><span id="line-2"></span><span class="hs-comment">-- editorconfig-checker-disable-file</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><span id="line-6"></span><span class="hs-comment">--</span><span>
+</span><span id="line-7"></span><span class="hs-comment">-- Module      :  $Headers</span><span>
+</span><span id="line-8"></span><span class="hs-comment">-- License     :  Apache 2.0</span><span>
+</span><span id="line-9"></span><span class="hs-comment">--</span><span>
+</span><span id="line-10"></span><span class="hs-comment">-- Stability   :  Experimental</span><span>
+</span><span id="line-11"></span><span class="hs-comment">-- Portability :  Portable</span><span>
+</span><span id="line-12"></span><span class="hs-comment">--</span><span>
+</span><span id="line-13"></span><span class="hs-comment">-- | Marlowe validators.</span><span>
+</span><span id="line-14"></span><span class="hs-comment">--</span><span>
+</span><span id="line-15"></span><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="hs-pragma">{-# LANGUAGE ConstraintKinds       #-}</span><span>
+</span><span id="line-19"></span><span class="hs-pragma">{-# LANGUAGE DataKinds             #-}</span><span>
+</span><span id="line-20"></span><span class="hs-pragma">{-# LANGUAGE DefaultSignatures     #-}</span><span>
+</span><span id="line-21"></span><span class="hs-pragma">{-# LANGUAGE DeriveAnyClass        #-}</span><span>
+</span><span id="line-22"></span><span class="hs-pragma">{-# LANGUAGE DeriveGeneric         #-}</span><span>
+</span><span id="line-23"></span><span class="hs-pragma">{-# LANGUAGE DerivingVia           #-}</span><span>
+</span><span id="line-24"></span><span class="hs-pragma">{-# LANGUAGE EmptyDataDecls        #-}</span><span>
+</span><span id="line-25"></span><span class="hs-pragma">{-# LANGUAGE FlexibleContexts      #-}</span><span>
+</span><span id="line-26"></span><span class="hs-pragma">{-# LANGUAGE FlexibleInstances     #-}</span><span>
+</span><span id="line-27"></span><span class="hs-pragma">{-# LANGUAGE ImportQualifiedPost   #-}</span><span>
+</span><span id="line-28"></span><span class="hs-pragma">{-# LANGUAGE LambdaCase            #-}</span><span>
+</span><span id="line-29"></span><span class="hs-pragma">{-# LANGUAGE MultiParamTypeClasses #-}</span><span>
+</span><span id="line-30"></span><span class="hs-pragma">{-# LANGUAGE NamedFieldPuns        #-}</span><span>
+</span><span id="line-31"></span><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude     #-}</span><span>
+</span><span id="line-32"></span><span class="hs-pragma">{-# LANGUAGE OverloadedStrings     #-}</span><span>
+</span><span id="line-33"></span><span class="hs-pragma">{-# LANGUAGE RankNTypes            #-}</span><span>
+</span><span id="line-34"></span><span class="hs-pragma">{-# LANGUAGE RecordWildCards       #-}</span><span>
+</span><span id="line-35"></span><span class="hs-pragma">{-# LANGUAGE ScopedTypeVariables   #-}</span><span>
+</span><span id="line-36"></span><span class="hs-pragma">{-# LANGUAGE TemplateHaskell       #-}</span><span>
+</span><span id="line-37"></span><span class="hs-pragma">{-# LANGUAGE TypeApplications      #-}</span><span>
+</span><span id="line-38"></span><span class="hs-pragma">{-# LANGUAGE TypeFamilies          #-}</span><span>
+</span><span id="line-39"></span><span class="hs-pragma">{-# LANGUAGE TypeOperators         #-}</span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="hs-pragma">{-# OPTIONS_GHC -fno-ignore-interface-pragmas #-}</span><span>
+</span><span id="line-42"></span><span class="hs-pragma">{-# OPTIONS_GHC -fplugin-opt PlutusTx.Plugin:defer-errors #-}</span><span>
+</span><span id="line-43"></span><span class="hs-pragma">{-# OPTIONS_GHC -fplugin-opt PlutusTx.Plugin:target-version=1.0.0 #-}</span><span>
+</span><span id="line-44"></span><span class="hs-pragma">{-# OPTIONS_GHC -Wno-name-shadowing #-}</span><span>
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Marlowe.Scripts.RolePayout</span><span>
+</span><span id="line-48"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-comment">-- * Payout Validator</span></span><span>
+</span><span id="line-49"></span><span>    </span><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidatorHash"><span class="hs-identifier">rolePayoutValidatorHash</span></a></span><span>
+</span><span id="line-50"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidatorBytes"><span class="hs-identifier">rolePayoutValidatorBytes</span></a></span><span>
+</span><span id="line-51"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidator"><span class="hs-identifier">rolePayoutValidator</span></a></span><span>
+</span><span id="line-52"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#mkRolePayoutValidator"><span class="hs-identifier">mkRolePayoutValidator</span></a></span><span>
+</span><span id="line-53"></span><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span>
+</span><span id="line-56"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">PlutusLedgerApi.V2</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">CurrencySymbol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ScriptContext</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">scriptContextTxInfo</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ScriptHash</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-57"></span><span>                           </span><span class="annot"><span class="hs-identifier">SerialisedScript</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">TokenName</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">serialiseCompiledCode</span></span><span class="hs-special">)</span><span>
+</span><span id="line-58"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">PlutusLedgerApi.V2.Contexts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">valueSpent</span></span><span class="hs-special">)</span><span>
+</span><span id="line-59"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">PlutusTx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">CompiledCode</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unsafeFromBuiltinData</span></span><span class="hs-special">)</span><span>
+</span><span id="line-60"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">PlutusTx.Plugin</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-61"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">PlutusTx.Prelude</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">PlutusTxPrelude</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="../../../../ghc/html/libraries/ghc-prim-0.8.0/src"><span class="hs-identifier">Bool</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">BuiltinData</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">check</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">toBuiltin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">($)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-62"></span><span>
+</span><span id="line-63"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Cardano.Crypto.Hash</span></span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Hash</span></span><span>
+</span><span id="line-64"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.ByteString</span></span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">BS</span></span><span>
+</span><span id="line-65"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.ByteString.Short</span></span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">SBS</span></span><span>
+</span><span id="line-66"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">PlutusLedgerApi.V1.Value</span></span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Val</span></span><span>
+</span><span id="line-67"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">PlutusTx</span></span><span> </span><span class="hs-keyword">qualified</span><span>
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span>
+</span><span id="line-70"></span><span class="hs-comment">-- | Tag for the Marlowe payout validator.</span><span>
+</span><span id="line-71"></span><span class="hs-keyword">data</span><span> </span><span id="TypedRolePayoutValidator"><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#TypedRolePayoutValidator"><span class="hs-identifier hs-var">TypedRolePayoutValidator</span></a></span></span><span>
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="hs-comment">-- | The Marlowe payout validator.</span><span>
+</span><span id="line-75"></span><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#mkRolePayoutValidator"><span class="hs-identifier hs-type">mkRolePayoutValidator</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">CurrencySymbol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TokenName</span></span><span class="hs-special">)</span><span>  </span><span class="hs-comment">-- ^ The datum is the currency symbol and role name for the payout.</span><span>
+</span><span id="line-76"></span><span>                      </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>                           </span><span class="hs-comment">-- ^ No redeemer is required.</span><span>
+</span><span id="line-77"></span><span>                      </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ScriptContext</span></span><span>                </span><span class="hs-comment">-- ^ The script context.</span><span>
+</span><span id="line-78"></span><span>                      </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../../../ghc/html/libraries/ghc-prim-0.8.0/src"><span class="hs-identifier hs-type">Bool</span></a></span><span>                         </span><span class="hs-comment">-- ^ Whether the transaction validated.</span><span>
+</span><span id="line-79"></span><span id="mkRolePayoutValidator"><span class="annot"><span class="annottext">mkRolePayoutValidator :: (CurrencySymbol, TokenName) -&gt; () -&gt; ScriptContext -&gt; Bool
+</span><a href="Language.Marlowe.Scripts.RolePayout.html#mkRolePayoutValidator"><span class="hs-identifier hs-var hs-var">mkRolePayoutValidator</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679993428"><span class="annot"><span class="annottext">CurrencySymbol
+</span><a href="#local-6989586621679993428"><span class="hs-identifier hs-var">currency</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679993427"><span class="annot"><span class="annottext">TokenName
+</span><a href="#local-6989586621679993427"><span class="hs-keyword hs-var">role</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">()
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679993426"><span class="annot"><span class="annottext">ScriptContext
+</span><a href="#local-6989586621679993426"><span class="hs-identifier hs-var">ctx</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-80"></span><span>    </span><span class="hs-comment">-- The role token for the correct currency must be present.</span><span>
+</span><span id="line-81"></span><span>    </span><span class="hs-comment">-- [Marlowe-Cardano Specification: &quot;17. Payment authorized&quot;.]</span><span>
+</span><span id="line-82"></span><span>    </span><span class="annot"><span class="annottext">CurrencySymbol -&gt; TokenName -&gt; Integer -&gt; Value
+</span><span class="hs-identifier hs-var">Val.singleton</span></span><span> </span><span class="annot"><span class="annottext">CurrencySymbol
+</span><a href="#local-6989586621679993428"><span class="hs-identifier hs-var">currency</span></a></span><span> </span><span class="annot"><span class="annottext">TokenName
+</span><a href="#local-6989586621679993427"><span class="hs-keyword hs-var">role</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Value -&gt; Value -&gt; Bool
+</span><span class="hs-operator hs-var">`Val.leq`</span></span><span> </span><span class="annot"><span class="annottext">TxInfo -&gt; Value
+</span><span class="hs-identifier hs-var">valueSpent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ScriptContext -&gt; TxInfo
+</span><span class="hs-identifier hs-var">scriptContextTxInfo</span></span><span> </span><span class="annot"><span class="annottext">ScriptContext
+</span><a href="#local-6989586621679993426"><span class="hs-identifier hs-var">ctx</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-83"></span><span>
+</span><span id="line-84"></span><span>
+</span><span id="line-85"></span><span class="hs-comment">-- | Compute the hash of a script.</span><span>
+</span><span id="line-86"></span><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#hashScript"><span class="hs-identifier hs-type">hashScript</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CompiledCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">BuiltinData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BuiltinData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BuiltinData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ScriptHash</span></span><span>
+</span><span id="line-87"></span><span id="hashScript"><span class="annot"><span class="annottext">hashScript :: CompiledCode (BuiltinData -&gt; BuiltinData -&gt; BuiltinData -&gt; ())
+-&gt; ScriptHash
+</span><a href="Language.Marlowe.Scripts.RolePayout.html#hashScript"><span class="hs-identifier hs-var hs-var">hashScript</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-88"></span><span>  </span><span class="hs-comment">-- FIXME: Apparently this is the wrong recipe, since its hash disagrees with `cardano-cli`.</span><span>
+</span><span id="line-89"></span><span>  </span><span class="annot"><span class="annottext">BuiltinByteString -&gt; ScriptHash
+</span><span class="hs-identifier hs-var">ScriptHash</span></span><span>
+</span><span id="line-90"></span><span>    </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall a arep. ToBuiltin a arep =&gt; a -&gt; arep
+</span><span class="hs-identifier hs-var">toBuiltin</span></span><span>
+</span><span id="line-91"></span><span>    </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall h a. Hash h a -&gt; ByteString
+</span><span class="hs-identifier hs-var">Hash.hashToBytes</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Hash.Hash</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Hash.Blake2b_224</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SBS.ShortByteString</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BS.ByteString</span></span><span class="hs-special">)</span><span>
+</span><span id="line-92"></span><span>    </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall h a. HashAlgorithm h =&gt; (a -&gt; ByteString) -&gt; a -&gt; Hash h a
+</span><span class="hs-identifier hs-var">Hash.hashWith</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ByteString -&gt; ByteString -&gt; ByteString
+</span><span class="hs-identifier hs-var">BS.append</span></span><span> </span><span class="annot"><span class="annottext">ByteString
+</span><span class="hs-string">&quot;\x02&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ShortByteString -&gt; ByteString
+</span><span class="hs-identifier hs-var">SBS.fromShort</span></span><span class="hs-special">)</span><span>  </span><span class="hs-comment">-- For Plutus V2.</span><span>
+</span><span id="line-93"></span><span>    </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall a. CompiledCode a -&gt; ShortByteString
+</span><span class="hs-identifier hs-var">serialiseCompiledCode</span></span><span>
+</span><span id="line-94"></span><span>
+</span><span id="line-95"></span><span>
+</span><span id="line-96"></span><span class="hs-pragma">{-# INLINABLE</span><span> </span><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidator"><span class="hs-pragma hs-type">rolePayoutValidator</span></a></span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><span id="line-97"></span><span>
+</span><span id="line-98"></span><span class="hs-comment">-- | The Marlowe payout validator.</span><span>
+</span><span id="line-99"></span><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidator"><span class="hs-identifier hs-type">rolePayoutValidator</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CompiledCode</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">BuiltinData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BuiltinData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BuiltinData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-100"></span><span id="rolePayoutValidator"><span class="annot"><span class="annottext">rolePayoutValidator :: CompiledCode (BuiltinData -&gt; BuiltinData -&gt; BuiltinData -&gt; ())
+</span><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidator"><span class="hs-identifier hs-var hs-var">rolePayoutValidator</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-101"></span><span>  </span><span class="hs-special">$$</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">PlutusTx.compile</span></span><span> </span><span class="hs-special">[||</span><span> </span><span class="hs-identifier">rolePayoutValidator'</span><span> </span><span class="hs-special">||]</span><span class="hs-special">)</span><span>
+</span><span id="line-102"></span><span>    </span><span class="hs-keyword">where</span><span>
+</span><span id="line-103"></span><span>      </span><span class="annot"><a href="#local-6989586621679993417"><span class="hs-identifier hs-type">rolePayoutValidator'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BuiltinData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BuiltinData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BuiltinData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-104"></span><span>      </span><span id="local-6989586621679993417"><span class="annot"><span class="annottext">rolePayoutValidator' :: BuiltinData -&gt; BuiltinData -&gt; BuiltinData -&gt; ()
+</span><a href="#local-6989586621679993417"><span class="hs-identifier hs-var hs-var">rolePayoutValidator'</span></a></span></span><span> </span><span id="local-6989586621679993413"><span class="annot"><span class="annottext">BuiltinData
+</span><a href="#local-6989586621679993413"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679993412"><span class="annot"><span class="annottext">BuiltinData
+</span><a href="#local-6989586621679993412"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679993411"><span class="annot"><span class="annottext">BuiltinData
+</span><a href="#local-6989586621679993411"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-105"></span><span>        </span><span class="annot"><span class="annottext">Bool -&gt; ()
+</span><span class="hs-identifier hs-var">check</span></span><span>
+</span><span id="line-106"></span><span>          </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(CurrencySymbol, TokenName) -&gt; () -&gt; ScriptContext -&gt; Bool
+</span><a href="Language.Marlowe.Scripts.RolePayout.html#mkRolePayoutValidator"><span class="hs-identifier hs-var">mkRolePayoutValidator</span></a></span><span>
+</span><span id="line-107"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. UnsafeFromData a =&gt; BuiltinData -&gt; a
+</span><span class="hs-identifier hs-var">unsafeFromBuiltinData</span></span><span> </span><span class="annot"><span class="annottext">BuiltinData
+</span><a href="#local-6989586621679993413"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-108"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. UnsafeFromData a =&gt; BuiltinData -&gt; a
+</span><span class="hs-identifier hs-var">unsafeFromBuiltinData</span></span><span> </span><span class="annot"><span class="annottext">BuiltinData
+</span><a href="#local-6989586621679993412"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-109"></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. UnsafeFromData a =&gt; BuiltinData -&gt; a
+</span><span class="hs-identifier hs-var">unsafeFromBuiltinData</span></span><span> </span><span class="annot"><span class="annottext">BuiltinData
+</span><a href="#local-6989586621679993411"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-110"></span><span>
+</span><span id="line-111"></span><span>
+</span><span id="line-112"></span><span class="hs-comment">-- | The serialisation of the Marlowe payout validator.</span><span>
+</span><span id="line-113"></span><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidatorBytes"><span class="hs-identifier hs-type">rolePayoutValidatorBytes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SerialisedScript</span></span><span>
+</span><span id="line-114"></span><span id="rolePayoutValidatorBytes"><span class="annot"><span class="annottext">rolePayoutValidatorBytes :: ShortByteString
+</span><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidatorBytes"><span class="hs-identifier hs-var hs-var">rolePayoutValidatorBytes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. CompiledCode a -&gt; ShortByteString
+</span><span class="hs-identifier hs-var">serialiseCompiledCode</span></span><span> </span><span class="annot"><span class="annottext">CompiledCode (BuiltinData -&gt; BuiltinData -&gt; BuiltinData -&gt; ())
+</span><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidator"><span class="hs-identifier hs-var">rolePayoutValidator</span></a></span><span>
+</span><span id="line-115"></span><span>
+</span><span id="line-116"></span><span>
+</span><span id="line-117"></span><span class="hs-comment">-- | The hash of the Marlowe payout validator.</span><span>
+</span><span id="line-118"></span><span class="annot"><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidatorHash"><span class="hs-identifier hs-type">rolePayoutValidatorHash</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ScriptHash</span></span><span>
+</span><span id="line-119"></span><span id="rolePayoutValidatorHash"><span class="annot"><span class="annottext">rolePayoutValidatorHash :: ScriptHash
+</span><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidatorHash"><span class="hs-identifier hs-var hs-var">rolePayoutValidatorHash</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CompiledCode (BuiltinData -&gt; BuiltinData -&gt; BuiltinData -&gt; ())
+-&gt; ScriptHash
+</span><a href="Language.Marlowe.Scripts.RolePayout.html#hashScript"><span class="hs-identifier hs-var">hashScript</span></a></span><span> </span><span class="annot"><span class="annottext">CompiledCode (BuiltinData -&gt; BuiltinData -&gt; BuiltinData -&gt; ())
+</span><a href="Language.Marlowe.Scripts.RolePayout.html#rolePayoutValidator"><span class="hs-identifier hs-var">rolePayoutValidator</span></a></span><span>
+</span><span id="line-120"></span></pre></body></html>
